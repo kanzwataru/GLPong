@@ -6,10 +6,8 @@
 //  Copyright © 2017年 神崎航. All rights reserved.
 //
 
-#include <stdio.h>
+#include "cube_bounce.h"
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    printf("Hello, World!\n");
-    return 0;
+    cube_bounce_run();
 }
