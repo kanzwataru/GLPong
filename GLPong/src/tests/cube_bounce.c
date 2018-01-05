@@ -44,6 +44,13 @@ static const Color lf_col = {0.8f, 0.4f, 0.3f, 1.0f};
 static const Color dwn_col = {0.25f, 0.8f, 1.0f, 1.0f};
 static const Color up_col = {1.0f, 0.8f, 0.1f, 1.0f};
 
+static const float ASPECT_RATIO = (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT;
+
+int calc_init_dir() {
+    int val = i_range_rand(1, 10);
+    return val >= 5 ? 1 : -1;
+}
+
 void add_sprite(int amount) {
     int total = sprite_count + amount;
     
@@ -51,16 +58,16 @@ void add_sprite(int amount) {
         if(sprite_count + 1 >= SPRITE_NUM)
             return;
         
-        sprites[i] = (Sprite *)malloc(sizeof(Sprite));
+        sprites[i] = malloc(sizeof(Sprite));
         sprites[i]->rect.x = f_range_rand(-1.0f, 1.0f);
         sprites[i]->rect.y = f_range_rand(-1.0f, 1.0f);
         sprites[i]->rect.w = SPRITE_MAX_SIZE;
-        sprites[i]->rect.h = SPRITE_MAX_SIZE;
+        sprites[i]->rect.h = SPRITE_MAX_SIZE * ASPECT_RATIO;
         sprites[i]->depth = 0.0f;
         sprites[i]->color = col;
         
-        dirs_x[i] = -1;
-        dirs_y[i] = 1;
+        dirs_x[i] = calc_init_dir();
+        dirs_y[i] = calc_init_dir();
         
         speeds[i] = SPRITE_MIN_SPEED;
         
@@ -70,7 +77,7 @@ void add_sprite(int amount) {
     float new_size = f_clamp(sprites[0]->rect.w * 0.7f, SPRITE_MIN_SIZE, SPRITE_MAX_SIZE);
     for(int i = 0; i < sprite_count; i++) {
         sprites[i]->rect.w = new_size;
-        sprites[i]->rect.h = new_size;
+        sprites[i]->rect.h = new_size * ASPECT_RATIO;
     }
 }
 
