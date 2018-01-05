@@ -156,10 +156,11 @@ void RND_init(const char *title, int width, int height) {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
     
-    window = SDL_CreateWindow("OpenGL", 100, 100, 800, 600, SDL_WINDOW_OPENGL);
+    window = SDL_CreateWindow("OpenGL", 100, 100, width, height, SDL_WINDOW_OPENGL);
     context = SDL_GL_CreateContext(window);
     
     SDL_GL_SetSwapInterval(1);
+    glEnable(GL_DEPTH_TEST);
     
     const char *vert_src = load_file("shaders/flat.vert");
     const char *frag_src = load_file("shaders/flat.frag");
@@ -198,7 +199,7 @@ void RND_render(Sprite **prev_sprites, Sprite **next_sprites, int count) {
     frame_num++;
     
     glClearColor(0.6f, 0.1f, 0.1f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     if(count != square_count)
         _resize_buf(count);
