@@ -13,6 +13,8 @@
 #include <OpenGL/glu.h>
 #include <OpenGL/gl3.h>
 
+#include "glmc.h"
+
 #include "render_datatypes.h"
 #include "filesystem.h"
 #include "png_export.h"

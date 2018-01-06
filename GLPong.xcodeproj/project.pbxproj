@@ -12,6 +12,8 @@
 		63497F8E1FF889BC00A9EE6A /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63497F8D1FF889BC00A9EE6A /* SDL2.framework */; };
 		635366FB1FFBE75000D080A8 /* lodepng.c in Sources */ = {isa = PBXBuildFile; fileRef = 635366FA1FFBE75000D080A8 /* lodepng.c */; };
 		635366FF1FFBE76C00D080A8 /* png_export.c in Sources */ = {isa = PBXBuildFile; fileRef = 635366FD1FFBE76C00D080A8 /* png_export.c */; };
+		63769A832000467E006FB4F8 /* libglmc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63769A822000467E006FB4F8 /* libglmc.a */; };
+		63769A85200047B0006FB4F8 /* glmc.h in Frameworks */ = {isa = PBXBuildFile; fileRef = 63769A84200047B0006FB4F8 /* glmc.h */; };
 		6391CFDE20000809007E8A9B /* cube_bounce.c in Sources */ = {isa = PBXBuildFile; fileRef = 6391CFDC20000809007E8A9B /* cube_bounce.c */; };
 		6394C3211FFAA2220067DB80 /* flat.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63DB827E1FF9A7FB007A3947 /* flat.vert */; };
 		6394C3221FFAA2240067DB80 /* flat.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63DB827F1FF9A805007A3947 /* flat.frag */; };
@@ -46,6 +48,8 @@
 		635366FC1FFBE75300D080A8 /* lodepng.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lodepng.h; sourceTree = "<group>"; };
 		635366FD1FFBE76C00D080A8 /* png_export.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = png_export.c; sourceTree = "<group>"; };
 		635366FE1FFBE76C00D080A8 /* png_export.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = png_export.h; sourceTree = "<group>"; };
+		63769A822000467E006FB4F8 /* libglmc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglmc.a; path = GLPong/libraries/extern/libglmc.a; sourceTree = "<group>"; };
+		63769A84200047B0006FB4F8 /* glmc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = glmc.h; path = GLPong/libraries/extern/glmc.h; sourceTree = "<group>"; };
 		6391CFDC20000809007E8A9B /* cube_bounce.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = cube_bounce.c; sourceTree = "<group>"; };
 		6391CFDD20000809007E8A9B /* cube_bounce.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cube_bounce.h; sourceTree = "<group>"; };
 		6394C3231FFAA2800067DB80 /* filesystem.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = filesystem.c; sourceTree = "<group>"; };
@@ -66,6 +70,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				63497F8E1FF889BC00A9EE6A /* SDL2.framework in Frameworks */,
+				63769A832000467E006FB4F8 /* libglmc.a in Frameworks */,
+				63769A85200047B0006FB4F8 /* glmc.h in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +108,8 @@
 		63497F8C1FF889BC00A9EE6A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				63769A84200047B0006FB4F8 /* glmc.h */,
+				63769A822000467E006FB4F8 /* libglmc.a */,
 				63497F911FF88FD400A9EE6A /* GL */,
 				63497F8F1FF88FC000A9EE6A /* libGLEW.dylib */,
 				63497F8D1FF889BC00A9EE6A /* SDL2.framework */,
@@ -350,6 +358,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/Cellar/glew/2.1.0/lib,
+					"$(PROJECT_DIR)/GLPong/libraries/extern",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -366,6 +375,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/usr/local/Cellar/glew/2.1.0/lib,
+					"$(PROJECT_DIR)/GLPong/libraries/extern",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
