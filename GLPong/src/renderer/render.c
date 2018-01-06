@@ -12,8 +12,7 @@
 #include <SDL2/SDL_opengl.h>
 #include <OpenGL/glu.h>
 #include <OpenGL/gl3.h>
-
-#include "glmc.h"
+#include "linmath.h"
 
 #include "render_utils.h"
 #include "render_datatypes.h"
@@ -75,6 +74,10 @@ static void _set_buf(float *buf, const Sprite *sprite, const int index) {
     }
 }
 
+static void _set_rot(float *buf, const Sprite *sprite, const int index) {
+
+}
+
 void RND_init(const char *title, int width, int height) {
     SDL_Init(SDL_INIT_EVERYTHING);
 
@@ -123,6 +126,7 @@ void RND_render(Sprite **prev_sprites, Sprite **next_sprites, int count) {
 
     for(int i = 0; i < count; i++) {
         _set_buf(square_buf, next_sprites[i], i);
+        _set_rot(square_buf, next_sprites[i], i);
     }
     
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (SQUARE_VERT_NUM * VERT_SIZE * count), square_buf, GL_STREAM_DRAW);

@@ -12,9 +12,8 @@
 		63497F8E1FF889BC00A9EE6A /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63497F8D1FF889BC00A9EE6A /* SDL2.framework */; };
 		635366FB1FFBE75000D080A8 /* lodepng.c in Sources */ = {isa = PBXBuildFile; fileRef = 635366FA1FFBE75000D080A8 /* lodepng.c */; };
 		635366FF1FFBE76C00D080A8 /* png_export.c in Sources */ = {isa = PBXBuildFile; fileRef = 635366FD1FFBE76C00D080A8 /* png_export.c */; };
-		63769A832000467E006FB4F8 /* libglmc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63769A822000467E006FB4F8 /* libglmc.a */; };
-		63769A85200047B0006FB4F8 /* glmc.h in Frameworks */ = {isa = PBXBuildFile; fileRef = 63769A84200047B0006FB4F8 /* glmc.h */; };
 		63769A8820005782006FB4F8 /* render_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 63769A8620005782006FB4F8 /* render_utils.c */; };
+		63769A8B20006C0D006FB4F8 /* linmath.h in Sources */ = {isa = PBXBuildFile; fileRef = 63769A8A20006C08006FB4F8 /* linmath.h */; };
 		6391CFDE20000809007E8A9B /* cube_bounce.c in Sources */ = {isa = PBXBuildFile; fileRef = 6391CFDC20000809007E8A9B /* cube_bounce.c */; };
 		6394C3211FFAA2220067DB80 /* flat.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63DB827E1FF9A7FB007A3947 /* flat.vert */; };
 		6394C3221FFAA2240067DB80 /* flat.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63DB827F1FF9A805007A3947 /* flat.frag */; };
@@ -53,6 +52,7 @@
 		63769A84200047B0006FB4F8 /* glmc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = glmc.h; path = GLPong/libraries/extern/glmc.h; sourceTree = "<group>"; };
 		63769A8620005782006FB4F8 /* render_utils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = render_utils.c; sourceTree = "<group>"; };
 		63769A8720005782006FB4F8 /* render_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = render_utils.h; sourceTree = "<group>"; };
+		63769A8A20006C08006FB4F8 /* linmath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = linmath.h; sourceTree = "<group>"; };
 		6391CFDC20000809007E8A9B /* cube_bounce.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = cube_bounce.c; sourceTree = "<group>"; };
 		6391CFDD20000809007E8A9B /* cube_bounce.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cube_bounce.h; sourceTree = "<group>"; };
 		6394C3231FFAA2800067DB80 /* filesystem.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = filesystem.c; sourceTree = "<group>"; };
@@ -73,8 +73,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				63497F8E1FF889BC00A9EE6A /* SDL2.framework in Frameworks */,
-				63769A832000467E006FB4F8 /* libglmc.a in Frameworks */,
-				63769A85200047B0006FB4F8 /* glmc.h in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +121,7 @@
 		635367001FFBE85800D080A8 /* libraries */ = {
 			isa = PBXGroup;
 			children = (
+				63769A8A20006C08006FB4F8 /* linmath.h */,
 				635366FC1FFBE75300D080A8 /* lodepng.h */,
 				635366FA1FFBE75000D080A8 /* lodepng.c */,
 			);
@@ -246,6 +245,7 @@
 				6391CFDE20000809007E8A9B /* cube_bounce.c in Sources */,
 				6394C3251FFAA2800067DB80 /* filesystem.c in Sources */,
 				63DB82821FF9A8C2007A3947 /* render.c in Sources */,
+				63769A8B20006C0D006FB4F8 /* linmath.h in Sources */,
 				63252F6C1FF9B0BA00FD774E /* util_funcs.c in Sources */,
 				635366FB1FFBE75000D080A8 /* lodepng.c in Sources */,
 				63497F861FF8895400A9EE6A /* main.c in Sources */,
