@@ -9,6 +9,7 @@
 #include "cube_bounce.h"
 
 #include <stdlib.h>
+#include <limits.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <SDL2/SDL.h>
@@ -18,8 +19,8 @@
 #include "gameplay.h"
 #include "util_funcs.h"
 
-#define SPRITE_NUM 40000
-#define SPRITE_ADD_FRAME 1000
+#define SPRITE_NUM INT_MAX
+#define SPRITE_ADD_FRAME 300
 #define SPRITE_MIN_SPEED 0.003f
 #define SPRITE_MAX_SPEED 0.01f
 #define SPRITE_MIN_SIZE 0.01f
@@ -31,10 +32,10 @@ Uint32 fps_lasttime; //the last recorded time.
 Uint32 fps_current; //the current FPS.
 Uint32 fps_frames = 0; //frames passed since the last recorded fps.
 
-Sprite *sprites[SPRITE_NUM];
-float speeds[SPRITE_NUM];
-int dirs_x[SPRITE_NUM];
-int dirs_y[SPRITE_NUM];
+Sprite **sprites;
+float *speeds;
+int *dirs_x;
+int *dirs_y;
 int sprite_count = 0;
 
 int frame_count = 0;
@@ -54,7 +55,7 @@ void add_sprite(int amount) {
     
     for(int i = sprite_count; i < total; i++) {
         if(sprite_count + 1 >= SPRITE_NUM)
-            return;
+            break;
         
         sprites[i] = malloc(sizeof(Sprite));
         sprites[i]->rect.x = f_range_rand(-1.0f, 1.0f);
@@ -81,6 +82,11 @@ void add_sprite(int amount) {
 }
 
 void cube_bounce_run(void) {
+    sprites = calloc(INT_MAX, sizeof(Sprite *));
+    speeds = calloc(INT_MAX, sizeof(float));
+    dirs_x = calloc(INT_MAX, sizeof(int));
+    dirs_y = calloc(INT_MAX, sizeof(int));
+    
     RND_init("GLPong", SCREEN_WIDTH, SCREEN_HEIGHT);
     
     fps_lasttime = SDL_GetTicks();
@@ -149,6 +155,10 @@ void cube_bounce_run(void) {
     for(int i = 0; i < sprite_count; i++) {
         free(sprites[i]);
     }
+    free(sprites);
+    free(speeds);
+    free(dirs_x);
+    free(dirs_y);
     
     printf("Last FPS: %u\n", fps_current);
 }
