@@ -14,6 +14,7 @@
 		635366FF1FFBE76C00D080A8 /* png_export.c in Sources */ = {isa = PBXBuildFile; fileRef = 635366FD1FFBE76C00D080A8 /* png_export.c */; };
 		63769A832000467E006FB4F8 /* libglmc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63769A822000467E006FB4F8 /* libglmc.a */; };
 		63769A85200047B0006FB4F8 /* glmc.h in Frameworks */ = {isa = PBXBuildFile; fileRef = 63769A84200047B0006FB4F8 /* glmc.h */; };
+		63769A8820005782006FB4F8 /* render_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = 63769A8620005782006FB4F8 /* render_utils.c */; };
 		6391CFDE20000809007E8A9B /* cube_bounce.c in Sources */ = {isa = PBXBuildFile; fileRef = 6391CFDC20000809007E8A9B /* cube_bounce.c */; };
 		6394C3211FFAA2220067DB80 /* flat.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63DB827E1FF9A7FB007A3947 /* flat.vert */; };
 		6394C3221FFAA2240067DB80 /* flat.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63DB827F1FF9A805007A3947 /* flat.frag */; };
@@ -50,6 +51,8 @@
 		635366FE1FFBE76C00D080A8 /* png_export.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = png_export.h; sourceTree = "<group>"; };
 		63769A822000467E006FB4F8 /* libglmc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libglmc.a; path = GLPong/libraries/extern/libglmc.a; sourceTree = "<group>"; };
 		63769A84200047B0006FB4F8 /* glmc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = glmc.h; path = GLPong/libraries/extern/glmc.h; sourceTree = "<group>"; };
+		63769A8620005782006FB4F8 /* render_utils.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = render_utils.c; sourceTree = "<group>"; };
+		63769A8720005782006FB4F8 /* render_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = render_utils.h; sourceTree = "<group>"; };
 		6391CFDC20000809007E8A9B /* cube_bounce.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = cube_bounce.c; sourceTree = "<group>"; };
 		6391CFDD20000809007E8A9B /* cube_bounce.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cube_bounce.h; sourceTree = "<group>"; };
 		6394C3231FFAA2800067DB80 /* filesystem.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = filesystem.c; sourceTree = "<group>"; };
@@ -126,6 +129,16 @@
 			path = libraries;
 			sourceTree = "<group>";
 		};
+		63769A89200059B1006FB4F8 /* game */ = {
+			isa = PBXGroup;
+			children = (
+				63DB82831FF9AAF4007A3947 /* gameplay.c */,
+				63DB82841FF9AAF4007A3947 /* gameplay.h */,
+				63DB82861FF9AB38007A3947 /* globals.h */,
+			);
+			path = game;
+			sourceTree = "<group>";
+		};
 		6391CFDB200007DD007E8A9B /* tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -141,12 +154,10 @@
 				63DB82801FF9A8C2007A3947 /* render.c */,
 				63DB82811FF9A8C2007A3947 /* render.h */,
 				63DB82871FF9AC97007A3947 /* render_datatypes.h */,
-				63252F6A1FF9B0BA00FD774E /* util_funcs.c */,
-				63252F6B1FF9B0BA00FD774E /* util_funcs.h */,
-				6394C3231FFAA2800067DB80 /* filesystem.c */,
-				6394C3241FFAA2800067DB80 /* filesystem.h */,
 				635366FD1FFBE76C00D080A8 /* png_export.c */,
 				635366FE1FFBE76C00D080A8 /* png_export.h */,
+				63769A8620005782006FB4F8 /* render_utils.c */,
+				63769A8720005782006FB4F8 /* render_utils.h */,
 			);
 			path = renderer;
 			sourceTree = "<group>";
@@ -155,11 +166,13 @@
 			isa = PBXGroup;
 			children = (
 				6391CFDF2000146E007E8A9B /* renderer */,
+				63769A89200059B1006FB4F8 /* game */,
 				6391CFDB200007DD007E8A9B /* tests */,
+				63252F6B1FF9B0BA00FD774E /* util_funcs.h */,
+				63252F6A1FF9B0BA00FD774E /* util_funcs.c */,
+				6394C3231FFAA2800067DB80 /* filesystem.c */,
 				63497F851FF8895400A9EE6A /* main.c */,
-				63DB82831FF9AAF4007A3947 /* gameplay.c */,
-				63DB82841FF9AAF4007A3947 /* gameplay.h */,
-				63DB82861FF9AB38007A3947 /* globals.h */,
+				6394C3241FFAA2800067DB80 /* filesystem.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -238,6 +251,7 @@
 				63497F861FF8895400A9EE6A /* main.c in Sources */,
 				635366FF1FFBE76C00D080A8 /* png_export.c in Sources */,
 				63DB82851FF9AAF4007A3947 /* gameplay.c in Sources */,
+				63769A8820005782006FB4F8 /* render_utils.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

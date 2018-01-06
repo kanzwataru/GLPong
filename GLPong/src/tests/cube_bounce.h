@@ -11,6 +11,6 @@
 
 #include <stdio.h>
 
-void cube_bounce_run();
+void cube_bounce_run(void);
 
 #endif /* cube_bounce_h */

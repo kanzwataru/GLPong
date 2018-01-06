@@ -11,26 +11,26 @@
 
 #include <stdint.h>
 
-typedef struct _color {
+typedef struct {
     float r;
     float g;
     float b;
     float a;
 } Color;
 
-typedef struct _point {
+typedef struct {
     float x;
     float y;
 } Point;
 
-typedef struct _rect {
+typedef struct {
     float x;
     float y;
     float w;
     float h;
 } Rect;
 
-typedef struct _sprite {
+typedef struct {
     float rotation;
     int depth;
     Color color;

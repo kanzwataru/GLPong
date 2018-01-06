@@ -63,6 +63,7 @@ void add_sprite(int amount) {
         sprites[i]->rect.y = f_range_rand(-1.0f, 1.0f);
         sprites[i]->rect.w = SPRITE_MAX_SIZE;
         sprites[i]->rect.h = SPRITE_MAX_SIZE * ASPECT_RATIO;
+        sprites[i]->rotation = 0.0f;
         sprites[i]->depth = 0.0f;
         sprites[i]->color = col;
         
@@ -81,7 +82,7 @@ void add_sprite(int amount) {
     }
 }
 
-void cube_bounce_run() {
+void cube_bounce_run(void) {
     RND_init("GLPong", SCREEN_WIDTH, SCREEN_HEIGHT);
     
     fps_lasttime = SDL_GetTicks();
@@ -98,6 +99,7 @@ void cube_bounce_run() {
         
         Rect *rect;
         for(int i = 0; i < sprite_count; i++) {
+            sprites[i]->rotation += 1.0f;
             rect = &sprites[i]->rect;
             rect->x += speeds[i] * dirs_x[i];
             rect->y += speeds[i] * dirs_y[i];
