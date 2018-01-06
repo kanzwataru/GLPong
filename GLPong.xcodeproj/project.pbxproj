@@ -169,9 +169,9 @@
 				6391CFDB200007DD007E8A9B /* tests */,
 				63252F6B1FF9B0BA00FD774E /* util_funcs.h */,
 				63252F6A1FF9B0BA00FD774E /* util_funcs.c */,
-				6394C3231FFAA2800067DB80 /* filesystem.c */,
 				63497F851FF8895400A9EE6A /* main.c */,
 				6394C3241FFAA2800067DB80 /* filesystem.h */,
+				6394C3231FFAA2800067DB80 /* filesystem.c */,
 			);
 			path = src;
 			sourceTree = "<group>";

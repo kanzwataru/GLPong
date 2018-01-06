@@ -29,6 +29,7 @@ static float *square_buf = NULL;
 static int square_count = 0;
 
 static int frame_num = 0;
+static float reverse_aspect_ratio;
 
 static void _resize_buf(float **square_buf, int count) {
     free(*square_buf);
@@ -38,9 +39,16 @@ static void _resize_buf(float **square_buf, int count) {
     square_count = count;
 }
 
-static void _set_buf(float *buf, const Sprite *sprite, const int index) {
-    int offset = index * (SQUARE_VERT_NUM * VERT_SIZE);
+static void _set_cols(float *buf, const Sprite *sprite, const int offset) {
+    for(int i = 3; i < (SQUARE_VERT_NUM * VERT_SIZE); i += 7) {
+        buf[0 + i + offset] = sprite->color.r;
+        buf[1 + i + offset] = sprite->color.g;
+        buf[2 + i + offset] = sprite->color.b;
+        buf[3 + i + offset] = sprite->color.a;
+    }
+}
 
+static void _set_buf(float *buf, const Sprite *sprite, const int offset) {
     buf[0 + offset] = sprite->rect.x;
     buf[1 + offset] = sprite->rect.y;
     buf[2 + offset] = sprite->depth;
@@ -65,17 +73,69 @@ static void _set_buf(float *buf, const Sprite *sprite, const int index) {
     buf[36 + offset] = sprite->rect.y - sprite->rect.h;
     buf[37 + offset] = sprite->depth;
     
-    /* Put colours */
-    for(int i = 3; i < (SQUARE_VERT_NUM * VERT_SIZE); i += 7) {
-        buf[0 + i + offset] = sprite->color.r;
-        buf[1 + i + offset] = sprite->color.g;
-        buf[2 + i + offset] = sprite->color.b;
-        buf[3 + i + offset] = sprite->color.a;
-    }
+    _set_cols(buf, sprite, offset);
 }
 
-static void _set_rot(float *buf, const Sprite *sprite, const int index) {
+static void _set_buf_nopos(float *buf, const Sprite *sprite, const int offset) {
+    float halfw = sprite->rect.w * 0.5f;
+    float halfh = sprite->rect.h * 0.5f;
+    
+    buf[0 + offset] = -halfw;
+    buf[1 + offset] = halfh;
+    buf[2 + offset] = sprite->depth;
+    
+    buf[7 + offset] = halfw;
+    buf[8 + offset] = halfh;
+    buf[9 + offset] = sprite->depth;
+    
+    buf[14 + offset] = -halfw;
+    buf[15 + offset] = -halfh;
+    buf[16 + offset] = sprite->depth;
+    
+    buf[21 + offset] = buf[7 + offset];
+    buf[22 + offset] = buf[8 + offset];
+    buf[23 + offset] = sprite->depth;
+    
+    buf[28 + offset] = buf[14 + offset];
+    buf[29 + offset] = buf[15 + offset];
+    buf[30 + offset] = sprite->depth;
+    
+    buf[35 + offset] = halfw;
+    buf[36 + offset] = -halfh;
+    buf[37 + offset] = sprite->depth;
+    
+    _set_cols(buf, sprite, offset);
+}
 
+static void _set_rot_pos(float *buf, const Sprite *sprite, const int offset) {
+    mat4x4 model;
+    mat4x4_identity(model);
+    
+    mat4x4 q;
+    mat4x4_identity(q);
+    
+    mat4x4_rotate_Z(model, q, deg_to_rad(sprite->rotation));
+    for(int i = 0; i < 4; i++) {
+        for(int j = 0; j < 4; j++) {
+            //printf("%f \n", model[i][j]);
+        }
+    }
+    
+    for(int i = 0; i < (SQUARE_VERT_NUM * VERT_SIZE); i += 7) {
+        vec4 temp;
+        temp[0] = buf[0 + i + offset];
+        temp[1] = buf[1 + i + offset];
+        temp[2] = buf[2 + i + offset];
+        
+        vec4 result = {0.0f, 0.0f, 0.0f, 0.0f};
+        
+        mat4x4_mul_vec4(result, model, temp);
+        buf[0 + i + offset] = (result[0] * reverse_aspect_ratio) + sprite->rect.x;
+        buf[1 + i + offset] = result[1] + sprite->rect.y;
+        buf[2 + i + offset] = result[2];
+        
+        //printf("(%f, %f, %f) \n", buf[0 + i + offset], buf[1 + i + offset], buf[2 + i + offset]);
+    }
 }
 
 void RND_init(const char *title, int width, int height) {
@@ -93,6 +153,7 @@ void RND_init(const char *title, int width, int height) {
     glEnable(GL_DEPTH_TEST);
     
     flat_shader = add_shader("shaders/flat.vert", "shaders/flat.frag");
+    reverse_aspect_ratio = (float)height / (float)width;
     
     GLuint vao, vbo;
     glGenVertexArrays(1, &vao);
@@ -124,9 +185,12 @@ void RND_render(Sprite **prev_sprites, Sprite **next_sprites, int count) {
     if(count != square_count)
         _resize_buf(&square_buf, count);
 
+    int offset;
     for(int i = 0; i < count; i++) {
-        _set_buf(square_buf, next_sprites[i], i);
-        _set_rot(square_buf, next_sprites[i], i);
+        offset = i * (SQUARE_VERT_NUM * VERT_SIZE);
+        //_set_buf(square_buf, next_sprites[i], offset);
+        _set_buf_nopos(square_buf, next_sprites[i], offset);
+        _set_rot_pos(square_buf, next_sprites[i], offset);
     }
     
     glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (SQUARE_VERT_NUM * VERT_SIZE * count), square_buf, GL_STREAM_DRAW);
