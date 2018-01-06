@@ -9,6 +9,6 @@
 #ifndef filesystem_h
 #define filesystem_h
 
-const char *load_file(const char *path);
+char *load_file(const char *path);
 
 #endif /* filesystem_h */

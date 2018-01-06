@@ -8,6 +8,7 @@
 
 #include "render_utils.h"
 
+#include <stdlib.h>
 #include "filesystem.h"
 
 static GLuint _compile_shader(const char *vertsrc, const char *fragsrc) {
@@ -50,8 +51,8 @@ static GLuint _compile_shader(const char *vertsrc, const char *fragsrc) {
 }
 
 GLuint add_shader(const char *vert_filepath, const char *frag_filepath) {
-    const char *vert_src = load_file(vert_filepath);
-    const char *frag_src = load_file(frag_filepath);
+    char *vert_src = load_file(vert_filepath);
+    char *frag_src = load_file(frag_filepath);
     if(!vert_src) {
         printf("ERROR LOADING VERT SRC FILE: %s\n", vert_filepath);
         return 0;
@@ -62,4 +63,6 @@ GLuint add_shader(const char *vert_filepath, const char *frag_filepath) {
     }
     
     return _compile_shader(vert_src, frag_src);
+    free(vert_src);
+    free(frag_src);
 }

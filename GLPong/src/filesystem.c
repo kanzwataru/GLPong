@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include "filesystem.h"
 
-const char *load_file(const char *path) {
+char *load_file(const char *path) {
     FILE *fp;
     long lSize;
     char *buffer;
