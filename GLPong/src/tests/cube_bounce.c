@@ -20,7 +20,7 @@
 #include "util_funcs.h"
 
 #define SPRITE_NUM INT_MAX
-#define SPRITE_ADD_FRAME 300
+#define SPRITE_ADD_FRAME 100
 #define SPRITE_MIN_SPEED 0.003f
 #define SPRITE_MAX_SPEED 0.01f
 #define SPRITE_MIN_SIZE 0.01f

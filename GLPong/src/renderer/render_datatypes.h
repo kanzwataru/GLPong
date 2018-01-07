@@ -31,10 +31,10 @@ typedef struct {
 } Rect;
 
 typedef struct {
-    float rotation;
-    int depth;
     Color color;
     Rect rect;
+    float rotation;
+    int depth;
 } Sprite;
 
 #endif /* renderer_datatypes_h */
