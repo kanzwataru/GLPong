@@ -87,7 +87,7 @@ void cube_bounce_run(void) {
     dirs_x = calloc(INT_MAX, sizeof(int));
     dirs_y = calloc(INT_MAX, sizeof(int));
     
-    RND_init("GLPong", SCREEN_WIDTH, SCREEN_HEIGHT);
+    RenderInfo rinfo = RND_init("GLPong", SCREEN_WIDTH, SCREEN_HEIGHT);
     
     fps_lasttime = SDL_GetTicks();
     add_sprite(1);
@@ -104,27 +104,27 @@ void cube_bounce_run(void) {
         
         Rect *rect;
         for(int i = 0; i < sprite_count; i++) {
-            sprites[i]->rotation += 0.0001f;
+            //sprites[i]->rotation += 0.0001f;
             rect = &sprites[i]->rect;
             rect->x += speeds[i] * dirs_x[i];
             rect->y += speeds[i] * dirs_y[i];
             
-            if(rect->x + (rect->w * 0.5f) >= 1.0f) {
+            if(rect->x + (rect->w * 0.5f) >= rinfo.x_max) {
                 dirs_x[i] = -1;
                 speeds[i] = f_range_rand(SPRITE_MIN_SPEED, SPRITE_MAX_SPEED);
                 sprites[i]->color = col;
             }
-            if(rect->x - (rect->w * 0.5f) <= -1.0f) {
+            if(rect->x - (rect->w * 0.5f) <= rinfo.x_min) {
                 dirs_x[i] = 1;
                 speeds[i] = f_range_rand(SPRITE_MIN_SPEED, SPRITE_MAX_SPEED);
                 sprites[i]->color = lf_col;
             }
-            if(rect->y + (rect->h * 0.5f) >= 1.0f) {
+            if(rect->y + (rect->h * 0.5f) >= rinfo.y_max) {
                 dirs_y[i] = -1;
                 speeds[i] = f_range_rand(SPRITE_MIN_SPEED, SPRITE_MAX_SPEED);
                 sprites[i]->color = up_col;
             }
-            if(rect->y - (rect->h * 0.5f) <= -1.0f) {
+            if(rect->y - (rect->h * 0.5f) <= rinfo.y_min) {
                 dirs_y[i] = 1;
                 speeds[i] = f_range_rand(SPRITE_MIN_SPEED, SPRITE_MAX_SPEED);
                 sprites[i]->color = dwn_col;

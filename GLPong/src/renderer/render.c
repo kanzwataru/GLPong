@@ -17,6 +17,7 @@
 #include "render_utils.h"
 #include "render_datatypes.h"
 #include "png_export.h"
+#include "util_funcs.h"
 
 #define SQUARE_VERT_NUM 6
 #define VERT_SIZE 7
@@ -115,6 +116,7 @@ static void _set_rot_pos(float *buf, const Sprite *sprite, const int offset) {
     mat4x4_identity(q);
     
     mat4x4_rotate_Z(model, q, deg_to_rad(sprite->rotation));
+
     for(int i = 0; i < 4; i++) {
         for(int j = 0; j < 4; j++) {
             //printf("%f \n", model[i][j]);
@@ -130,7 +132,7 @@ static void _set_rot_pos(float *buf, const Sprite *sprite, const int offset) {
         vec4 result = {0.0f, 0.0f, 0.0f, 0.0f};
         
         mat4x4_mul_vec4(result, model, temp);
-        buf[0 + i + offset] = (result[0] * reverse_aspect_ratio) + sprite->rect.x;
+        buf[0 + i + offset] = (result[0] + sprite->rect.x) * reverse_aspect_ratio;
         buf[1 + i + offset] = result[1] + sprite->rect.y;
         buf[2 + i + offset] = result[2];
         
@@ -138,7 +140,7 @@ static void _set_rot_pos(float *buf, const Sprite *sprite, const int offset) {
     }
 }
 
-void RND_init(const char *title, int width, int height) {
+RenderInfo RND_init(const char *title, int width, int height) {
     SDL_Init(SDL_INIT_EVERYTHING);
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -153,7 +155,7 @@ void RND_init(const char *title, int width, int height) {
     glEnable(GL_DEPTH_TEST);
     
     flat_shader = add_shader("shaders/flat.vert", "shaders/flat.frag");
-    reverse_aspect_ratio = (float)height / (float)width;
+    reverse_aspect_ratio = 1 / ((float)width / (float)height);
     
     GLuint vao, vbo;
     glGenVertexArrays(1, &vao);
@@ -168,6 +170,15 @@ void RND_init(const char *title, int width, int height) {
     glEnableVertexAttribArray(1);
     
     glUseProgram(flat_shader);
+
+    RenderInfo rinfo;
+    rinfo.aspect_ratio = (float)width / (float)height;
+    rinfo.x_min = -rinfo.aspect_ratio;
+    rinfo.x_max = rinfo.aspect_ratio;
+    rinfo.y_min = -1.0f;
+    rinfo.y_max = 1.0f;
+
+    return rinfo;
 }
 
 void RND_quit(void) {
