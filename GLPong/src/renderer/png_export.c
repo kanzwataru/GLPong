@@ -9,7 +9,7 @@
 #include "png_export.h"
 
 #include <stdlib.h>
-#include <OpenGL/gl3.h>
+#include <glad/glad.h>
 
 #include "globals.h"
 #include "lodepng.h"

@@ -8,10 +8,12 @@
 
 #include "render.h"
 
+#include <stdlib.h>
+#include <stdio.h>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_opengl.h>
-#include <OpenGL/glu.h>
-#include <OpenGL/gl3.h>
+//#include <SDL2/SDL_opengl.h>
+
+#include "glad/glad.h"
 #include "linmath.h"
 
 #include "render_utils.h"
@@ -108,7 +110,9 @@ static void _set_buf(float *buf, const Sprite *sprite, const int offset) {
 }
 
 RenderInfo RND_init(const char *title, int width, int height) {
-    SDL_Init(SDL_INIT_EVERYTHING);
+    if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+        printf("Failed to initialize SDL\n");
+    }
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -117,6 +121,12 @@ RenderInfo RND_init(const char *title, int width, int height) {
     
     window = SDL_CreateWindow("OpenGL", 100, 100, width, height, SDL_WINDOW_OPENGL);
     context = SDL_GL_CreateContext(window);
+    if(!context) {
+        printf("Failed to make GL context\n");
+    }
+    if(!gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress)) {
+        printf("Failed to load glad\n");
+    }
     
     SDL_GL_SetSwapInterval(1);
     glEnable(GL_DEPTH_TEST);

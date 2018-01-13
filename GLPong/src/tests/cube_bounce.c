@@ -19,7 +19,7 @@
 #include "gameplay.h"
 #include "util_funcs.h"
 
-#define SPRITE_NUM INT_MAX
+#define SPRITE_NUM 24576
 #define SPRITE_ADD_FRAME 100
 #define SPRITE_MIN_SPEED 0.003f
 #define SPRITE_MAX_SPEED 0.01f
@@ -82,10 +82,10 @@ void add_sprite(int amount) {
 }
 
 void cube_bounce_run(void) {
-    sprites = calloc(INT_MAX, sizeof(Sprite *));
-    speeds = calloc(INT_MAX, sizeof(float));
-    dirs_x = calloc(INT_MAX, sizeof(int));
-    dirs_y = calloc(INT_MAX, sizeof(int));
+    sprites = calloc(SPRITE_NUM, sizeof(Sprite *));
+    speeds = calloc(SPRITE_NUM, sizeof(float));
+    dirs_x = calloc(SPRITE_NUM, sizeof(int));
+    dirs_y = calloc(SPRITE_NUM, sizeof(int));
     
     RenderInfo rinfo = RND_init("GLPong", SCREEN_WIDTH, SCREEN_HEIGHT);
     

@@ -9,10 +9,14 @@
 #ifndef render_utils_h
 #define render_utils_h
 
-#include <stdio.h>
-#include <OpenGL/gl3.h>
 #include <math.h>
+#include <stdio.h>
+#include <glad/glad.h>
 #include "linmath.h"
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif /* !M_PI */
 
 static inline double deg_to_rad(double radians) {
     return radians * (180.0 / M_PI);
