@@ -44,6 +44,7 @@ static const Color col = {1.0f, 0.5f, 0.2f, 1.0f};
 static const Color lf_col = {0.8f, 0.4f, 0.3f, 1.0f};
 static const Color dwn_col = {0.25f, 0.8f, 1.0f, 1.0f};
 static const Color up_col = {1.0f, 0.8f, 0.1f, 1.0f};
+static const Color bg_col = {0.6f, 0.1f, 0.1f, 1.0f};
 
 int calc_init_dir() {
     int val = i_range_rand(1, 10);
@@ -139,7 +140,9 @@ void cube_bounce_run(void) {
             printf("%u FPS @ %d sprites\n", fps_current, sprite_count);
             add_sprite(sprite_count);
         }
+        RND_beginframe(&bg_col);
         RND_render(&sprites[0], &sprites[0], sprite_count);
+        RND_endframe();
         
         fps_frames++;
         if (fps_lasttime < SDL_GetTicks() - FPS_INTERVAL*1000)

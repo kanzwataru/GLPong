@@ -37,4 +37,15 @@ typedef struct {
     int depth;
 } Sprite;
 
+typedef struct {
+    float aspect_ratio;
+    float x_min;
+    float x_max;
+    float y_min;
+    float y_max;
+} RenderInfo;
+
+static const Color RND_WHITE = {1.0f, 1.0f, 1.0f, 1.0f};
+static const Color RND_BLACK = {0.0f, 0.0f, 0.0f, 1.0f};
+
 #endif /* renderer_datatypes_h */

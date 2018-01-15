@@ -13,25 +13,34 @@
 #include <stdbool.h>
 #include "render_datatypes.h"
 
-typedef struct _Paddle {
-    Rect rect;
+typedef struct {
+    Sprite sprite;
     float speed;
     int direction;
     int score;
 } Paddle;
 
-typedef struct _ball {
-    Rect rect;
-    float dir_x;
-    float dir_y;
-    bool start;
+typedef struct {
+    Sprite sprite;
+    float vel_x;
+    float vel_y;
+    Rect *parent;
 } Ball;
 
-typedef struct _World {
+typedef struct {
     Paddle player;
     Paddle ai;
     Ball ball;
-    bool game_paused;
+    bool paused;
 } World;
+
+void GMP_down_event(void);
+void GMP_stop_event(void);
+void GMP_up_event(void);
+void GMP_serve_event(void);
+void GMP_pause_event(void);
+
+void GMP_init(const RenderInfo renderinfo);
+World GMP_update(void);
 
 #endif /* gameplay_h */

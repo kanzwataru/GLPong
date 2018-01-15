@@ -119,7 +119,7 @@ RenderInfo RND_init(const char *title, int width, int height) {
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
     
-    window = SDL_CreateWindow("OpenGL", 100, 100, width, height, SDL_WINDOW_OPENGL);
+    window = SDL_CreateWindow(title, 100, 100, width, height, SDL_WINDOW_OPENGL);
     context = SDL_GL_CreateContext(window);
     if(!context) {
         printf("Failed to make GL context\n");
@@ -169,17 +169,24 @@ void RND_quit(void) {
     SDL_Quit();
 }
 
-void RND_render(Sprite **prev_sprites, Sprite **next_sprites, int count) {
+void RND_beginframe(const Color *bg_color) {
     frame_num++;
-    
-    glClearColor(0.6f, 0.1f, 0.1f, 1.0f);
+
+    glClearColor(bg_color->r, bg_color->g, bg_color->b, bg_color->a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+}
+
+void RND_render(Sprite **prev_sprites, Sprite **next_sprites, int count) {
     if(count != squares.count)
         _resize_buf(&squares, count);
 
     int offset;
     for(int i = 0; i < count; i++) {
+        if(!next_sprites[i] || !prev_sprites[i]) {
+            printf("Sprite id [%d] is NULL \n", i);
+            continue;
+        }
+
         offset = i * (SQUARE_VERT_NUM * VERT_SIZE);
         _set_buf(squares.vertex_buf, next_sprites[i], offset);
     }
@@ -188,9 +195,11 @@ void RND_render(Sprite **prev_sprites, Sprite **next_sprites, int count) {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * (count * SQUARE_INDICES_NUM), squares.indices_buf, GL_STATIC_DRAW);
 
     glDrawElements(GL_TRIANGLES, SQUARE_INDICES_NUM * count, GL_UNSIGNED_INT, 0);
+}
 
+void RND_endframe(void) {
     SDL_GL_SwapWindow(window);
-    
+
     //printf("count: %d square_buf: %zu\n", count, sizeof(float) * (SQUARE_VERT_NUM * VERT_SIZE * count));
 
     //PNG_screenshot(frame_num);
