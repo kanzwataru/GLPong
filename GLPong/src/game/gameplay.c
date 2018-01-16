@@ -175,6 +175,9 @@ void GMP_init(const RenderInfo renderinfo) {
 }
 
 World GMP_update(void) {
+    if(wo.paused)
+        return wo;
+
     int ball_top_btm = ball_collides_topbtm(&wo.ball);
     int ball_left_right = ball_collides_leftright(&wo.ball);
     if(1 == ball_left_right) {

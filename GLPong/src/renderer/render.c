@@ -80,7 +80,7 @@ static void _resize_buf(Squares *squares, int count) {
 static void _set_buf(float *buf, const Sprite *sprite, const int offset) {
     float halfw = sprite->rect.w * 0.5f;
     float halfh = sprite->rect.h * 0.5f;
-    float depth = (float)sprite->depth * 0.01f;
+    float depth = -(float)sprite->depth * 0.01f;
     
     mat4x4 model;
     mat4x4_rotate_Z(model, identity, deg_to_rad(sprite->rotation));
@@ -130,6 +130,8 @@ RenderInfo RND_init(const char *title, int width, int height) {
     
     SDL_GL_SetSwapInterval(1);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
     flat_shader = add_shader("shaders/flat.vert", "shaders/flat.frag");

@@ -11,6 +11,33 @@ static RenderInfo rinfo;
 static World prev_world;
 static World world;
 
+#define GATE_TILES_NUM 90
+static Sprite gate_tiles[GATE_TILES_NUM];
+static Sprite pause_sprite;
+
+static void init_gate_tiles(void) {
+    for(int i = 0; i < GATE_TILES_NUM; ++i) {
+        gate_tiles[i].rect.x = 0.0f;
+        gate_tiles[i].rect.y = i * (GATE_H * 4) - 1;
+        gate_tiles[i].rect.w = GATE_W;
+        gate_tiles[i].rect.h = GATE_H;
+        gate_tiles[i].rotation = 0;
+        gate_tiles[i].depth = 0;
+        gate_tiles[i].color = RND_WHITE;
+    }
+}
+
+static void init_pause_sprite(void) {
+    Color col = {0.8f, 0.8f, 0.8f, 0.1f};
+    pause_sprite.color = col;
+    pause_sprite.depth = 2;
+    pause_sprite.rect.x = 0.0f;
+    pause_sprite.rect.y = 0.0f;
+    pause_sprite.rect.w = rinfo.x_max * 2;
+    pause_sprite.rect.h = 2.0f;
+    pause_sprite.rotation = 0;
+}
+
 static bool handle_input(void) {
     SDL_Event event;
     while(SDL_PollEvent(&event)) {
@@ -39,13 +66,25 @@ static bool handle_input(void) {
 }
 
 static void render(void) {
-    Sprite *sprites[3];
+    static Sprite *sprites[100];
+
     sprites[0] = &world.player.sprite;
     sprites[1] = &world.ai.sprite;
     sprites[2] = &world.ball.sprite;
+    int count = 3;
+
+    for(int i = 0; i < GATE_TILES_NUM; ++i) {
+        sprites[i + 3] = &gate_tiles[i];
+        ++count;
+    }
+
+    if(world.paused) {
+        sprites[count] = &pause_sprite;
+        ++count;
+    }
 
     RND_beginframe(&RND_BLACK);
-    RND_render(&sprites[0], &sprites[0], 3);
+    RND_render(&sprites[0], &sprites[0], count);
     RND_endframe();
 }
 
@@ -77,6 +116,8 @@ void run_pong(void) {
 
     // initialize game
     GMP_init(rinfo);
+    init_pause_sprite();
+    init_gate_tiles();
 
     // run game loop
     game_loop();

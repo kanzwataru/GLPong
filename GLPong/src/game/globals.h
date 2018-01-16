@@ -15,8 +15,8 @@
 #define FIXED_UPDATE_FPS 120
 #define MAX_FPS 60
 
-#define GATE_W 3
-#define GATE_H 5
+#define GATE_W 0.005f
+#define GATE_H 0.01f
 #define SCORE_W 10
 #define SCORE_H 30
 #define PADDLE_W 0.08f
