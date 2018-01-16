@@ -46,6 +46,7 @@ typedef struct {
 } RenderInfo;
 
 static const Color RND_WHITE = {1.0f, 1.0f, 1.0f, 1.0f};
+static const Color RND_GREY  = {0.5f, 0.5f, 0.5f, 1.0f};
 static const Color RND_BLACK = {0.0f, 0.0f, 0.0f, 1.0f};
 
 #endif /* renderer_datatypes_h */

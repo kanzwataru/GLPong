@@ -12,8 +12,30 @@ static World prev_world;
 static World world;
 
 #define GATE_TILES_NUM 90
+#define SCORE_TILES_NUM 20
 static Sprite gate_tiles[GATE_TILES_NUM];
 static Sprite pause_sprite;
+
+static Sprite player_score_tiles[SCORE_TILES_NUM];
+static Sprite ai_score_tiles[SCORE_TILES_NUM];
+static Sprite score_tile;
+
+static void init_score_tiles(void) {
+    score_tile.color = RND_GREY;
+    score_tile.depth = 2;
+    score_tile.rect.w = SCORE_W;
+    score_tile.rect.h = SCORE_H;
+    score_tile.rect.y = SCORE_Y;
+    score_tile.rotation = 0;
+
+    for(int i = 0; i < SCORE_TILES_NUM; ++i) {
+        player_score_tiles[i] = score_tile;
+        player_score_tiles[i].rect.x = PLAYER_SCORE_X + (i * (SCORE_W * 2));
+
+        ai_score_tiles[i] = score_tile;
+        ai_score_tiles[i].rect.x = AI_SCORE_X - (i * (SCORE_W * 2));
+    }
+}
 
 static void init_gate_tiles(void) {
     for(int i = 0; i < GATE_TILES_NUM; ++i) {
@@ -66,7 +88,7 @@ static bool handle_input(void) {
 }
 
 static void render(void) {
-    static Sprite *sprites[100];
+    Sprite *sprites[GATE_TILES_NUM + (SCORE_TILES_NUM * 2) + 4] = {NULL};
 
     sprites[0] = &world.player.sprite;
     sprites[1] = &world.ai.sprite;
@@ -80,6 +102,16 @@ static void render(void) {
 
     if(world.paused) {
         sprites[count] = &pause_sprite;
+        ++count;
+    }
+
+    for(int i = 0; i < world.player.score && i < SCORE_TILES_NUM; ++i) {
+        sprites[count] = &player_score_tiles[i];
+        ++count;
+    }
+
+    for(int i = 0; i < world.ai.score && i < SCORE_TILES_NUM; ++i) {
+        sprites[count] = &ai_score_tiles[i];
         ++count;
     }
 
@@ -116,6 +148,7 @@ void run_pong(void) {
 
     // initialize game
     GMP_init(rinfo);
+    init_score_tiles();
     init_pause_sprite();
     init_gate_tiles();
 

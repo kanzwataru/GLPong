@@ -17,8 +17,8 @@
 
 #define GATE_W 0.005f
 #define GATE_H 0.01f
-#define SCORE_W 10
-#define SCORE_H 30
+#define SCORE_W 0.03f
+#define SCORE_H 0.06f
 #define PADDLE_W 0.08f
 #define PADDLE_H 0.4f
 #define PADDLE_GAP 1.1f
@@ -36,9 +36,9 @@
 static const float TOP = 1.0f - (PADDLE_H / 2);
 static const float BTM = -1.0f + (PADDLE_H / 2);
 static const int SCREEN_HALF = 0.0f;
-static const int PLAYER_SCORE_X = 10;
-static const int AI_SCORE_X = SCREEN_WIDTH - (2 * SCORE_W);
-static const int SCORE_Y = 10;
+static const float PLAYER_SCORE_X = -1.25f;
+static const float AI_SCORE_X = 1.25f;
+static const float SCORE_Y = 0.92f;
 static const float AI_MAX_REACT = PADDLE_GAP - 0.1f;
 static const float AI_MIN_REACT = SCREEN_HALF;
 static const int AI_PADDLE_UPPER_BOUND = PADDLE_H * 0.2;
