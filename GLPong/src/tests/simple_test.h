@@ -6,6 +6,7 @@
 
 void simple_test(void) {
     RND_init("GLPong", 800, 600);
+    int buffer_id = RND_create_square_buffer();
 
     while(1) {
         SDL_Event event;
@@ -27,7 +28,7 @@ void simple_test(void) {
 
         Sprite *sprite_p = &sprite;
         RND_beginframe(&bg_col);
-        RND_render(&sprite_p, &sprite_p, 1);
+        RND_render(buffer_id, &sprite_p, &sprite_p, 1);
         RND_endframe();
     }
 }

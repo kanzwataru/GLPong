@@ -40,6 +40,8 @@ int sprite_count = 0;
 
 int frame_count = 0;
 
+int buffer_id;
+
 static const Color col = {1.0f, 0.5f, 0.2f, 1.0f};
 static const Color lf_col = {0.8f, 0.4f, 0.3f, 1.0f};
 static const Color dwn_col = {0.25f, 0.8f, 1.0f, 1.0f};
@@ -89,6 +91,7 @@ void cube_bounce_run(void) {
     dirs_y = calloc(SPRITE_NUM, sizeof(int));
     
     RenderInfo rinfo = RND_init("GLPong", SCREEN_WIDTH, SCREEN_HEIGHT);
+    buffer_id = RND_create_square_buffer();
     
     fps_lasttime = SDL_GetTicks();
     add_sprite(1);
@@ -141,7 +144,7 @@ void cube_bounce_run(void) {
             add_sprite(sprite_count);
         }
         RND_beginframe(&bg_col);
-        RND_render(&sprites[0], &sprites[0], sprite_count);
+        RND_render(buffer_id, &sprites[0], &sprites[0], sprite_count);
         RND_endframe();
         
         fps_frames++;

@@ -28,8 +28,10 @@
 RenderInfo RND_init(const char *title, int width, int height);
 void RND_quit(void);
 
+int RND_create_square_buffer();
+
 void RND_beginframe(const Color *bg_color);
-void RND_render(Sprite **prev, Sprite **next, int count);
+void RND_render(int id, Sprite **prev, Sprite **next, int count);
 void RND_endframe(void);
 
 #endif /* renderer_h */

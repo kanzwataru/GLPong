@@ -24,12 +24,16 @@
 #define SQUARE_VERT_NUM 4
 #define SQUARE_INDICES_NUM 6
 #define VERT_SIZE 7
+#define MAX_BUFFERS 2000
 
 typedef struct {
     float *vertex_buf;
     GLuint *indices_buf;
+    GLuint vao;
+    GLuint vbo;
+    GLuint ebo;
     int count;
-} Squares;
+} SquareBuf;
 
 static const float square_prim[] = {
     -1.0f, 1.0f,
@@ -48,36 +52,37 @@ static SDL_Window *window;
 static SDL_GLContext context;
 static GLuint flat_shader;
 
-static Squares squares = {NULL, NULL, 0};
+static SquareBuf *square_bufs[MAX_BUFFERS] = {NULL};
+static int square_buf_count = 0;
 
 static int frame_num = 0;
 static float reverse_aspect_ratio;
 
-static void _resize_buf(Squares *squares, int count) {
-    free(squares->vertex_buf);
-    free(squares->indices_buf);
+static void square_buf_resize(SquareBuf *square_buf, int count) {
+    free(square_buf->vertex_buf);
+    free(square_buf->indices_buf);
     
     int vbo_len = count * (SQUARE_VERT_NUM * VERT_SIZE);
     int ebo_len = count * SQUARE_INDICES_NUM;
     
-    squares->vertex_buf = calloc(vbo_len, sizeof(float));
-    squares->indices_buf = calloc(ebo_len, sizeof(GLuint));
+    square_buf->vertex_buf = calloc(vbo_len, sizeof(float));
+    square_buf->indices_buf = calloc(ebo_len, sizeof(GLuint));
     
     /* The EBO is always the same for each square,
        so assign them all right now*/
     int object_i = 0;
     for(int i = 0; i < ebo_len; i += 6) {
         for(int j = 0; j < SQUARE_INDICES_NUM; j++) {
-            squares->indices_buf[j + i] = square_prim_indices[j] + (object_i * SQUARE_VERT_NUM);
+            square_buf->indices_buf[j + i] = square_prim_indices[j] + (object_i * SQUARE_VERT_NUM);
             //printf("ebo [%d]: %u \n", j+i, batch->indices_buf[j + i]);
         }
         object_i++;
     }
     
-    squares->count = count;
+    square_buf->count = count;
 }
 
-static void _set_buf(float *buf, const Sprite *sprite, const int offset) {
+static void square_buf_set(float *buf, const Sprite *sprite, const int offset) {
     float halfw = sprite->rect.w * 0.5f;
     float halfh = sprite->rect.h * 0.5f;
     float depth = -(float)sprite->depth * 0.01f;
@@ -109,6 +114,27 @@ static void _set_buf(float *buf, const Sprite *sprite, const int offset) {
     }
 }
 
+static void buf_init(GLuint *vao, GLuint *vbo, GLuint *ebo, GLuint shader) {
+    glGenVertexArrays(1, vao);
+    glGenBuffers(1, vbo);
+    glGenBuffers(1, ebo);
+
+    glBindVertexArray(*vao);
+    glBindBuffer(GL_ARRAY_BUFFER, *vbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *ebo);
+
+    /* position */
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, VERT_SIZE * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+
+    /* colour */
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, VERT_SIZE * sizeof(float), (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glUseProgram(shader);
+    glBindVertexArray(0);
+}
+
 RenderInfo RND_init(const char *title, int width, int height) {
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         printf("Failed to initialize SDL\n");
@@ -137,22 +163,6 @@ RenderInfo RND_init(const char *title, int width, int height) {
     flat_shader = add_shader("shaders/flat.vert", "shaders/flat.frag");
     reverse_aspect_ratio = 1 / ((float)width / (float)height);
     
-    GLuint vao, vbo, ebo;
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-    glGenBuffers(1, &ebo);
-    
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    
-    glUseProgram(flat_shader);
-    
     mat4x4_identity(identity);
 
     RenderInfo rinfo;
@@ -166,9 +176,31 @@ RenderInfo RND_init(const char *title, int width, int height) {
 }
 
 void RND_quit(void) {
+    for(int i = 0; i < square_buf_count; ++i) {
+        free(square_bufs[i]);
+    }
+
     SDL_GL_DeleteContext(context);
     SDL_DestroyWindow(window);
     SDL_Quit();
+}
+
+int RND_create_square_buffer() {
+    //static SquareBuf squares = {NULL, NULL, 0};
+    if(square_buf_count + 1 >= MAX_BUFFERS) {
+        printf("ERROR: Reached maximum number of square buffers\n");
+        return -1;
+    }
+
+    int index = square_buf_count;
+
+    square_bufs[index] = calloc(1, sizeof(SquareBuf));
+    ++square_buf_count;
+
+    buf_init(&square_bufs[index]->vao, &square_bufs[index]->vbo, &square_bufs[index]->ebo, flat_shader);
+
+    printf("vao: %u vbo: %u ebo: %u\n", square_bufs[index]->vao, square_bufs[index]->vbo, square_bufs[index]->ebo);
+    return index;
 }
 
 void RND_beginframe(const Color *bg_color) {
@@ -178,9 +210,12 @@ void RND_beginframe(const Color *bg_color) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void RND_render(Sprite **prev_sprites, Sprite **next_sprites, int count) {
-    if(count != squares.count)
-        _resize_buf(&squares, count);
+void RND_render(int id, Sprite **prev_sprites, Sprite **next_sprites, int count) {
+    if(id > square_buf_count || id < 0) {
+        printf("ERROR: Invalid square buffer [%d]", id);
+    }
+    if(count != square_bufs[id]->count)
+        square_buf_resize(square_bufs[id], count);
 
     int offset;
     for(int i = 0; i < count; i++) {
@@ -190,11 +225,15 @@ void RND_render(Sprite **prev_sprites, Sprite **next_sprites, int count) {
         }
 
         offset = i * (SQUARE_VERT_NUM * VERT_SIZE);
-        _set_buf(squares.vertex_buf, next_sprites[i], offset);
+        square_buf_set(square_bufs[id]->vertex_buf, next_sprites[i], offset);
     }
+
+    glBindVertexArray(square_bufs[id]->vao);
+    glBindBuffer(GL_ARRAY_BUFFER, square_bufs[id]->vbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, square_bufs[id]->ebo);
     
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (count * SQUARE_VERT_NUM * VERT_SIZE), squares.vertex_buf, GL_STREAM_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * (count * SQUARE_INDICES_NUM), squares.indices_buf, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (count * SQUARE_VERT_NUM * VERT_SIZE), square_bufs[id]->vertex_buf, GL_STREAM_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * (count * SQUARE_INDICES_NUM), square_bufs[id]->indices_buf, GL_STATIC_DRAW);
 
     glDrawElements(GL_TRIANGLES, SQUARE_INDICES_NUM * count, GL_UNSIGNED_INT, 0);
 }

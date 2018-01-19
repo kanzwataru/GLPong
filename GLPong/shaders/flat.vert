@@ -7,5 +7,5 @@ out vec4 VertColor;
 void main()
 {
     gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-    VertColor = vec4(aCol.r, aCol.g, aCol.b, 1.0);
+    VertColor = vec4(aCol.r, aCol.g, aCol.b, aCol.a);
 }

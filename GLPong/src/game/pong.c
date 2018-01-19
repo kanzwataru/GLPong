@@ -20,6 +20,9 @@ static Sprite player_score_tiles[SCORE_TILES_NUM];
 static Sprite ai_score_tiles[SCORE_TILES_NUM];
 static Sprite score_tile;
 
+static int main_buffer;
+static int pause_buffer;
+
 static void init_score_tiles(void) {
     score_tile.color = RND_GREY;
     score_tile.depth = 2;
@@ -50,7 +53,7 @@ static void init_gate_tiles(void) {
 }
 
 static void init_pause_sprite(void) {
-    Color col = {0.8f, 0.8f, 0.8f, 0.1f};
+    Color col = {0.3f, 0.3f, 0.3f, 0.8f};
     pause_sprite.color = col;
     pause_sprite.depth = 2;
     pause_sprite.rect.x = 0.0f;
@@ -100,11 +103,6 @@ static void render(void) {
         ++count;
     }
 
-    if(world.paused) {
-        sprites[count] = &pause_sprite;
-        ++count;
-    }
-
     for(int i = 0; i < world.player.score && i < SCORE_TILES_NUM; ++i) {
         sprites[count] = &player_score_tiles[i];
         ++count;
@@ -116,7 +114,13 @@ static void render(void) {
     }
 
     RND_beginframe(&RND_BLACK);
-    RND_render(&sprites[0], &sprites[0], count);
+    RND_render(main_buffer, &sprites[0], &sprites[0], count);
+
+    if(world.paused) {
+        Sprite *p = &pause_sprite;
+        RND_render(pause_buffer, &p, &p, 1);
+    }
+
     RND_endframe();
 }
 
@@ -151,6 +155,9 @@ void run_pong(void) {
     init_score_tiles();
     init_pause_sprite();
     init_gate_tiles();
+
+    main_buffer = RND_create_square_buffer();
+    pause_buffer = RND_create_square_buffer();
 
     // run game loop
     game_loop();
