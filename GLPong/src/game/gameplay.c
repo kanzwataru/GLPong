@@ -45,7 +45,7 @@ static void ball_bounce(Ball *ball, int top_btm, int left_right) {
 }
 
 static void ball_smash(Ball *ball, float speed, int move_dir, float percent) {
-    ball->vel_y = -percent + (speed * move_dir * SMACK_FORCE_MULT);
+    ball->vel_y = percent + (speed * -move_dir * SMACK_FORCE_MULT);
 
     printf("ball->vel_y: %f speed: %f move_dir: %d percent: %f\n", ball->vel_y,speed,move_dir,percent);
 }
